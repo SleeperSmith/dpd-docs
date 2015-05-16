@@ -1,41 +1,52 @@
 <!--{
-  title: 'Using Deployd as a Node.js Module',
-  tags: ['node', 'module', 'server']
+  title: 'Using Deployd as an Express middleware',
+  tags: ['express', 'connect', 'middleware', 'server']
 }-->
 
-## Using Deployd as a Node.js Module
+## Using Deployd as an Express middleware
 
-Deployd is a node module and can be used inside other node programs or as the basis of an entire node program.
+Deployd can be used with express/connect. Deployd will attach functions and handler to express server object.
 
 ### Installing
 
 For an app in your current directory:
 
-    npm install deployd
-
-You can also install globally:
-
-    npm install deployd -g
+    npm install deployd express socket.io
 
 ### Hello World
 
-Here is a simple *hello world* using Deployd as a node module.
+Here is a simple *hello world* using Deployd as an express middleware.
 
-    // hello.js
-    var deployd = require('deployd')
-      , options = {port: 3000};
+    // hello-server-attach.js
+    var PORT = process.env.PORT || 3000;
+    var ENV = process.env.NODE_ENV || 'development';
 
-    var dpd = deployd(options);
+    // setup http + express + socket.io
+    var express = require('express');
+    var app = express();
+    var server = require('http').createServer(app);
+    var io = require('socket.io').listen(server, {'log level': 0});
 
-    dpd.listen();
+    // setup deployd
+    require('deployd').attach(server, {
+        socketIo: io,  // if not provided, attach will create one for you.
+        env: ENV,
+        db: {host:'localhost', port:27017, name:'test-app'}
+    });
 
-Run this like any other node program.
+    // After attach, express can use server.handleRequest as middleware
+    app.use(server.handleRequest);
 
-    node hello.js
+    // start server
+    server.listen(PORT);
+
+
+Run this like any other express server.
+
+    node hello-server-attach.js
 
 ### Server Options <!-- ref -->
 
-- **port** {Number} - the port to listen on
 - **db** {Object} - the database to connect to
  - **db.connectionString** {String} - The URI of the mongoDB using [standard Connection String](http://docs.mongodb.org/manual/reference/connection-string/). If `db.connectionString` is set, the other db options are ignored.
  - **db.port** {Number} - the port of the database server
@@ -45,6 +56,7 @@ Run this like any other node program.
   - **db.credentials.username** {String}
   - **db.credentials.password** {String}
 - **env** {String} - the environment to run in.
+- **socketIo** {Object} - socket.io instance.
 
 *Note: If options.env is "development", the dashboard will not require authentication and configuration will not be cached. Make sure to change this to "production" or something similar when deploying.*
 

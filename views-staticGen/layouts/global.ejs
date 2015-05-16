@@ -7,8 +7,8 @@
       <title>deployd</title>
     <% } %>
     <link href='http://fonts.googleapis.com/css?family=Bitter:400,700,400italic' rel='stylesheet' type='text/css'>
-    <link href="/stylesheets/style.css" rel='stylesheet' type='text/css'>
-    <link href="/stylesheets/prettify.css" rel='stylesheet' type='text/css'>
+    <link href="<%=rootRelUrl%>/stylesheets/style.css" rel='stylesheet' type='text/css'>
+    <link href="<%=rootRelUrl%>/stylesheets/prettify.css" rel='stylesheet' type='text/css'>
     <%- script('libs/angular') %>
     <%- script('libs/angular-sanitize') %>
     <%- script('libs/jquery-1.8.2') %>
@@ -71,11 +71,11 @@
       <div class="navbar-inner">
         <div class="container">
           <ul class="nav">
-            <li class="<%= active('home', data) %>"><a href="/">home</a></li>
-            <li class="<%= active('guides', data) %>" ><a href="/guides">guides</a></li>
-            <li class="<%= active('api', data) %>"><a href="/api">api</a></li>
-            <li class="<%= active('examples', data) %>"><a href="/examples">examples</a></li>
-            <li class="<%= active('modules', data) %>"><a href="/modules">modules</a></li>
+            <li class="<%= active('home', data) %>"><a href="<%=rootRelUrl%>/">home</a></li>
+            <li class="<%= active('guides', data) %>" ><a href="<%=rootRelUrl%>/guides">guides</a></li>
+            <li class="<%= active('api', data) %>"><a href="<%=rootRelUrl%>/api">api</a></li>
+            <li class="<%= active('examples', data) %>"><a href="<%=rootRelUrl%>/examples">examples</a></li>
+            <li class="<%= active('modules', data) %>"><a href="<%=rootRelUrl%>/modules">modules</a></li>
           </ul>
         </div>
       </div>
